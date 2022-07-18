@@ -4,15 +4,16 @@ module CandyCheck
     class ReceiptCollection
       # Multiple receipts as in verfication response
       # @return [Array<Receipt>]
-      attr_reader :receipts
+      attr_reader :receipts, :pending_renewal_info
 
       # Initializes a new instance which bases on a JSON result
       # from Apple's verification server
       # @param attributes [Array<Hash>] raw data from Apple's server
-      def initialize(attributes)
+      def initialize(attributes, pending_renewal_info = [])
         @receipts = attributes.map { |r| Receipt.new(r) }.sort do |a, b|
           a.purchase_date - b.purchase_date
         end
+        @pending_renewal_info = pending_renewal_info
       end
 
       # Check if the latest expiration date is passed
@@ -37,6 +38,12 @@ module CandyCheck
       # @return [Integer]
       def overdue_days
         (Date.today - expires_at.to_date).to_i
+      end
+
+      def auto_renewal_status
+        pending_renewal_info.map do |renewal_info|
+          renewal_info['auto_renew_status'] == '1'
+        end.any?
       end
     end
   end

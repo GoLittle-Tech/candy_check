@@ -3,6 +3,25 @@ require "spec_helper"
 describe CandyCheck::AppStore::ReceiptCollection do
   subject { CandyCheck::AppStore::ReceiptCollection.new(attributes) }
 
+  describe 'auto renewal status' do
+    it "auto renewal status false" do
+      pending_renewal_info = [ { "auto_renew_status"=> "0" }, { "auto_renew_status" => "1" } ]
+      receipt_collection = CandyCheck::AppStore::ReceiptCollection.new({}, pending_renewal_info)
+      _(receipt_collection.auto_renewal_status).must_be_true
+    end
+
+    it "auto renewal status true" do
+      pending_renewal_info = [ { "auto_renew_status"=> "0" } ]
+      receipt_collection = CandyCheck::AppStore::ReceiptCollection.new({}, pending_renewal_info)
+      _(receipt_collection.auto_renewal_status).must_be_false
+    end
+
+    it "auto renewal status empty" do
+      receipt_collection = CandyCheck::AppStore::ReceiptCollection.new({})
+      _(receipt_collection.auto_renewal_status).must_be_false
+    end
+  end
+
   describe "overdue subscription" do
     let(:attributes) do
       [{
