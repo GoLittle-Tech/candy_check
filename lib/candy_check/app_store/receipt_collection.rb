@@ -45,6 +45,10 @@ module CandyCheck
           renewal_info['auto_renew_status'] == '1'
         end.any?
       end
+
+      def auto_renew_product_id
+        pending_renewal_info&.first&.dig('auto_renew_product_id')
+      end
     end
   end
 end

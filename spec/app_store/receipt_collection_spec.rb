@@ -3,6 +3,17 @@ require "spec_helper"
 describe CandyCheck::AppStore::ReceiptCollection do
   subject { CandyCheck::AppStore::ReceiptCollection.new(attributes) }
 
+  it 'auto renew product id' do
+    pending_renewal_info = [{
+      'auto_renew_product_id' => 'test.plan',
+      'product_id' => 'play.yearly',
+      'original_transaction_id' => '2000000098657086',
+      'auto_renew_status' => '0'
+    }]
+    receipt_collection = CandyCheck::AppStore::ReceiptCollection.new({}, pending_renewal_info)
+    _(receipt_collection.auto_renew_product_id).must_equal 'test.plan'
+  end
+
   describe 'auto renewal status' do
     it "auto renewal status false" do
       pending_renewal_info = [ { "auto_renew_status"=> "0" }, { "auto_renew_status" => "1" } ]
