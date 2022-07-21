@@ -46,6 +46,10 @@ module CandyCheck
         end.any?
       end
 
+      def product_id
+        pending_renewal_info&.first&.dig('product_id')
+      end
+
       def auto_renew_product_id
         pending_renewal_info&.first&.dig('auto_renew_product_id')
       end
