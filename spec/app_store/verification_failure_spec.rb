@@ -3,7 +3,7 @@ require "spec_helper"
 describe CandyCheck::AppStore::VerificationFailure do
   subject { CandyCheck::AppStore::VerificationFailure }
   let(:known) do
-    [21_000, 21_002, 21_003, 21_004, 21_005, 21_006, 21_007, 21_008]
+    ["CUSTOM_01", 21_000, 21_002, 21_003, 21_004, 21_005, 21_006, 21_007, 21_008]
   end
 
   it "fetched an failure with message for every known code" do

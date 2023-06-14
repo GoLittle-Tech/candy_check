@@ -47,6 +47,7 @@ module CandyCheck
         end
       end
 
+      add "CUSTOM_01", "The response does not have latest_receipt_info"
       add 21_000, "The request to the App Store was not made using" \
                   " the HTTP POST request method."
       add 21_001, "This status code is no longer sent by the App Store."

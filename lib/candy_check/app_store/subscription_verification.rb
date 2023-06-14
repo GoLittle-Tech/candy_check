@@ -26,6 +26,10 @@ module CandyCheck
         if valid?
           build_collection(@response["latest_receipt_info"], @response["pending_renewal_info"])
         else
+          if status_is_ok && @response["latest_receipt_info"].nil?
+            return VerificationFailure.fetch("CUSTOM_01")
+          end
+
           VerificationFailure.fetch(@response["status"])
         end
       end
@@ -42,8 +46,11 @@ module CandyCheck
       end
 
       def valid?
-        status_is_ok = @response["status"] == STATUS_OK
         @response && status_is_ok && @response["latest_receipt_info"]
+      end
+
+      def status_is_ok
+        @response["status"] == STATUS_OK
       end
     end
   end

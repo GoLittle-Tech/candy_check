@@ -8,6 +8,21 @@ describe CandyCheck::AppStore::SubscriptionVerification do
   let(:data)     { "some_data"   }
   let(:secret)   { "some_secret" }
 
+  it "returns error for nil subscriptions" do
+    response = {
+      "status" => 0,
+      "latest_receipt_info" => nil
+    }
+
+    with_mocked_response(response) do |client, recorded|
+      result = subject.call!
+
+      _(result).must_be_instance_of CandyCheck::AppStore::VerificationFailure
+      _(result.code).must_equal "CUSTOM_01"
+      _(result.message).must_equal "The response does not have latest_receipt_info"
+    end
+  end
+
   it "returns a verification failure for status != 0" do
     with_mocked_response("status" => 21_000) do |client, recorded|
       result = subject.call!
